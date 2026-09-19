@@ -336,3 +336,6 @@ footer.foot {
   padding-top: 16px;
   margin-top: 32px;
 }
+
+/* Kompakter Knopf für Tabellenzeilen */
+button.btn.klein { padding: 4px 10px; font-size: 13px; }
