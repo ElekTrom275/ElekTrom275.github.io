@@ -53,7 +53,14 @@ export function buchungenImMonat(ausgaben, monat) {
   return ausgaben.filter((a) => monatVon(a.datum) === monat);
 }
 
-/** Summe der Ausgaben, Einnahmen und der Saldo für eine Liste von Buchungen. */
+/**
+ * Summe der Ausgaben, Einnahmen und der Saldo für eine Liste von Buchungen.
+ *
+ * Die Sparquote sagt, welcher Anteil der Einnahmen übrig geblieben ist:
+ * 3.000 € Einnahmen und 2.400 € Ausgaben ergeben 600 € Saldo, also 20 %.
+ * Ohne Einnahmen gibt es keinen sinnvollen Anteil – dann null, damit die
+ * Anzeige "–" zeigen kann statt einer erfundenen Zahl.
+ */
 export function ausgabenKennzahlen(buchungen) {
   let ausgaben = 0;
   let einnahmen = 0;
@@ -62,7 +69,13 @@ export function ausgabenKennzahlen(buchungen) {
     if (betrag >= 0) ausgaben += betrag;
     else einnahmen += -betrag;
   }
-  return { ausgaben, einnahmen, saldo: einnahmen - ausgaben };
+  const saldo = einnahmen - ausgaben;
+  return {
+    ausgaben,
+    einnahmen,
+    saldo,
+    sparquote: einnahmen > 0 ? saldo / einnahmen : null,
+  };
 }
 
 /** Summen je Kategorie – nur Ausgaben, keine Einnahmen. */
