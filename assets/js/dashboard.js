@@ -6,6 +6,7 @@ import { sicher, balkenListe, kpi } from './ui.js';
 import {
   portfolioKennzahlen, buchungenImMonat, ausgabenKennzahlen,
   ausgabenNachKategorie, vertragsKennzahlen, vertraegeNachDringlichkeit,
+  monatsUebersicht,
 } from './berechnung.js';
 
 export function zeichne(wurzel) {
@@ -16,6 +17,7 @@ export function zeichne(wurzel) {
   const monatsBuchungen = buchungenImMonat(stand.ausgaben, dieserMonat);
   const monat = ausgabenKennzahlen(monatsBuchungen);
   const vertraege = vertragsKennzahlen(stand.vertraege);
+  const gesamt = monatsUebersicht(stand.vertraege, monatsBuchungen);
 
   // Nur Fristen, die noch nicht verstrichen und in Sicht sind.
   const fristen = vertraegeNachDringlichkeit(stand.vertraege)
@@ -55,19 +57,51 @@ export function zeichne(wurzel) {
         zusatz: `${geld(vertraege.proJahr)} pro Jahr`,
       })}
       ${kpi({
-        label: 'Ausgaben ' + monatsName(dieserMonat),
+        label: 'Variable Ausgaben',
         wert: geld(monat.ausgaben),
-        zusatz: `Saldo ${geldMitVorzeichen(monat.saldo)}`,
-        klasse: '',
+        zusatz: 'ohne Verträge',
       })}
       ${kpi({
         label: 'Sparquote',
-        wert: monat.sparquote === null ? '–' : prozent(monat.sparquote),
-        klasse: monat.sparquote === null ? '' : monat.sparquote >= 0 ? 'pos' : 'neg',
-        zusatz: monat.sparquote === null
+        wert: gesamt.sparquote === null ? '–' : prozent(gesamt.sparquote),
+        klasse: gesamt.sparquote === null ? '' : gesamt.sparquote >= 0 ? 'pos' : 'neg',
+        zusatz: gesamt.sparquote === null
           ? 'keine Einnahmen erfasst'
-          : `${geldMitVorzeichen(monat.saldo)} von ${geld(monat.einnahmen)}`,
+          : 'nach allen Kosten',
       })}
+    </div>
+
+    <div class="card">
+      <h3>Was der Monat kostet</h3>
+      <p class="hint">
+        Verträge sind hier bereits enthalten – buche sie nicht zusätzlich
+        als Ausgabe, sonst zählen sie doppelt.
+      </p>
+      <div class="table-scroll"><table>
+        <tbody>
+          <tr>
+            <td>Fixkosten aus Verträgen</td>
+            <td class="num">${geld(gesamt.fixkosten)}</td>
+          </tr>
+          <tr>
+            <td>Variable Ausgaben · ${monatsName(dieserMonat)}</td>
+            <td class="num">${geld(gesamt.variabel)}</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>Gesamt pro Monat</td>
+            <td class="num">${geld(gesamt.gesamt)}</td>
+          </tr>
+        </tfoot>
+      </table></div>
+      <p class="hint" style="margin:14px 0 0">
+        ${gesamt.einnahmen > 0
+          ? `Bei Einnahmen von ${geld(gesamt.einnahmen)} bleiben
+             <strong class="${gesamt.saldo >= 0 ? 'pos' : 'neg'}">${geldMitVorzeichen(gesamt.saldo)}</strong>
+             übrig – eine Sparquote von ${prozent(gesamt.sparquote)}.`
+          : 'Für diesen Monat sind keine Einnahmen erfasst. Trage dein Gehalt unter „Ausgaben“ mit einem Minus ein, dann erscheint hier die Sparquote.'}
+      </p>
     </div>
 
     <div class="card">

@@ -55,11 +55,8 @@ export function buchungenImMonat(ausgaben, monat) {
 
 /**
  * Summe der Ausgaben, Einnahmen und der Saldo für eine Liste von Buchungen.
- *
- * Die Sparquote sagt, welcher Anteil der Einnahmen übrig geblieben ist:
- * 3.000 € Einnahmen und 2.400 € Ausgaben ergeben 600 € Saldo, also 20 %.
- * Ohne Einnahmen gibt es keinen sinnvollen Anteil – dann null, damit die
- * Anzeige "–" zeigen kann statt einer erfundenen Zahl.
+ * Betrachtet ausschließlich erfasste Buchungen – Verträge bleiben außen vor.
+ * Wer den vollständigen Monat will, nimmt monatsUebersicht() weiter unten.
  */
 export function ausgabenKennzahlen(buchungen) {
   let ausgaben = 0;
@@ -69,13 +66,7 @@ export function ausgabenKennzahlen(buchungen) {
     if (betrag >= 0) ausgaben += betrag;
     else einnahmen += -betrag;
   }
-  const saldo = einnahmen - ausgaben;
-  return {
-    ausgaben,
-    einnahmen,
-    saldo,
-    sparquote: einnahmen > 0 ? saldo / einnahmen : null,
-  };
+  return { ausgaben, einnahmen, saldo: einnahmen - ausgaben };
 }
 
 /** Summen je Kategorie – nur Ausgaben, keine Einnahmen. */
@@ -159,4 +150,44 @@ export function vertraegeNachDringlichkeit(vertraege) {
       if (b.tage === null) return -1;
       return a.tage - b.tage;
     });
+}
+
+/* --- Der ganze Monat ------------------------------------------------------ */
+
+/**
+ * Was ein Monat wirklich kostet.
+ *
+ * Die App führt Kosten an zwei Stellen: Verträge laufen automatisch weiter und
+ * werden einmal erfasst, einzelne Ausgaben tippst du jeden Monat neu ein.
+ * Für die Frage "wie viel brauche ich im Monat?" zählt beides zusammen:
+ *
+ *     Fixkosten aus Verträgen + variable Ausgaben = Gesamt
+ *
+ * Die Fixkosten kommen aus vertragProMonat(), rechnen also einen Jahresbeitrag
+ * auf ein Zwölftel herunter. Der Monat, in dem tatsächlich abgebucht wird,
+ * spielt keine Rolle – sonst sähe der Januar teuer und der Februar günstig aus,
+ * obwohl sich nichts geändert hat.
+ *
+ * WICHTIG: Ein Vertrag, den du zusätzlich von Hand als Ausgabe buchst, zählt
+ * doppelt. Die App kann das nicht erkennen – "Miete" als Vertrag und "Miete"
+ * als Buchung sind für sie zwei verschiedene Dinge. Entweder Vertrag oder
+ * Buchung, nicht beides.
+ */
+export function monatsUebersicht(vertraege, buchungen) {
+  const fixkosten = vertragsKennzahlen(vertraege).proMonat;
+  const { ausgaben: variabel, einnahmen } = ausgabenKennzahlen(buchungen);
+  const gesamt = fixkosten + variabel;
+  const saldo = einnahmen - gesamt;
+
+  return {
+    fixkosten,
+    variabel,
+    gesamt,
+    einnahmen,
+    saldo,
+    // Anteil der Einnahmen, der nach allen Kosten übrig bleibt.
+    // Ohne Einnahmen gibt es keinen sinnvollen Anteil – dann null, damit die
+    // Anzeige "–" zeigen kann statt einer erfundenen Zahl.
+    sparquote: einnahmen > 0 ? saldo / einnahmen : null,
+  };
 }
