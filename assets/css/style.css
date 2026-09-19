@@ -1,0 +1,338 @@
+/* ==========================================================================
+   Finanzplattform – Styles
+   --------------------------------------------------------------------------
+   Aufbau dieser Datei:
+   1. Farben & Tokens (hell + dunkel)
+   2. Grundlayout
+   3. Bausteine: Karten, Kennzahlen, Tabellen, Formulare, Balken
+   ========================================================================== */
+
+/* -- 1. Farben & Tokens ---------------------------------------------------- */
+:root {
+  color-scheme: light;
+
+  --surface-page:   #f6f5f2;
+  --surface-1:      #fcfcfb;
+  --surface-2:      #f0efec;
+  --border:         #e0dfd9;
+  --border-strong:  #c9c8c0;
+
+  --text-primary:   #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted:     #7d7c76;
+
+  --accent:         #2a78d6;
+  --accent-soft:    #cde2fb;
+
+  --good:           #008300;
+  --warning:        #eda100;
+  --critical:       #e34948;
+
+  --radius:   10px;
+  --radius-s: 6px;
+  --gap:      16px;
+
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-num: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+}
+
+/* Dunkelmodus: einmal für die Systemeinstellung, einmal für den Umschalter.
+   Beide Blöcke braucht es, damit der Umschalter immer gewinnt. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --surface-page:   #131312;
+    --surface-1:      #1a1a19;
+    --surface-2:      #232322;
+    --border:         #383835;
+    --border-strong:  #52514e;
+    --text-primary:   #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted:     #94938a;
+    --accent:         #3987e5;
+    --accent-soft:    #184f95;
+    --good:           #4caf50;
+    --warning:        #c98500;
+    --critical:       #e66767;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface-page:   #131312;
+  --surface-1:      #1a1a19;
+  --surface-2:      #232322;
+  --border:         #383835;
+  --border-strong:  #52514e;
+  --text-primary:   #ffffff;
+  --text-secondary: #c3c2b7;
+  --text-muted:     #94938a;
+  --accent:         #3987e5;
+  --accent-soft:    #184f95;
+  --good:           #4caf50;
+  --warning:        #c98500;
+  --critical:       #e66767;
+}
+
+/* -- 2. Grundlayout -------------------------------------------------------- */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--surface-page);
+  color: var(--text-primary);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 16px 64px;
+}
+
+header.top {
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-1);
+  margin-bottom: 24px;
+}
+header.top .wrap {
+  padding-top: 18px;
+  padding-bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+header.top h1 {
+  font-size: 18px;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+header.top .spacer { flex: 1 1 auto; }
+
+/* Reiter-Navigation */
+nav.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  width: 100%;
+  margin-top: 10px;
+}
+nav.tabs button {
+  appearance: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--text-secondary);
+  font: inherit;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: var(--radius-s) var(--radius-s) 0 0;
+}
+nav.tabs button:hover { background: var(--surface-2); color: var(--text-primary); }
+nav.tabs button[aria-selected="true"] {
+  color: var(--text-primary);
+  border-bottom-color: var(--accent);
+  font-weight: 600;
+}
+
+.view[hidden] { display: none; }
+.view h2 { font-size: 20px; margin: 0 0 4px; }
+.view > p.lead { color: var(--text-secondary); margin: 0 0 20px; }
+
+/* -- 3. Bausteine ---------------------------------------------------------- */
+
+/* Karte */
+.card {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin-bottom: var(--gap);
+}
+.card > h3 {
+  margin: 0 0 2px;
+  font-size: 15px;
+}
+.card > p.hint {
+  margin: 0 0 14px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+/* Kennzahlen-Kacheln */
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: var(--gap);
+  margin-bottom: var(--gap);
+}
+.kpi {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+}
+.kpi .label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+.kpi .value {
+  font-family: var(--font-num);
+  font-size: 26px;
+  font-variant-numeric: tabular-nums;
+  margin-top: 6px;
+  letter-spacing: -0.02em;
+}
+.kpi .sub { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+
+.pos { color: var(--good); }
+.neg { color: var(--critical); }
+
+/* Balkenliste (für Aufteilungen – eine Farbe, Länge trägt die Aussage) */
+.bars { display: flex; flex-direction: column; gap: 10px; }
+.bar-row { display: grid; grid-template-columns: 1fr; gap: 4px; }
+.bar-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+}
+.bar-head .name { color: var(--text-primary); }
+.bar-head .val {
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.bar-track {
+  background: var(--surface-2);
+  border-radius: 4px;
+  height: 10px;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 0 4px 4px 0;
+  min-width: 2px;
+}
+
+/* Tabellen */
+.table-scroll { overflow-x: auto; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+th, td {
+  text-align: left;
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+th {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+td.num, th.num {
+  text-align: right;
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+}
+tbody tr:hover { background: var(--surface-2); }
+tfoot td { font-weight: 600; border-bottom: 0; border-top: 2px solid var(--border-strong); }
+.empty { color: var(--text-muted); font-style: italic; padding: 14px 2px; }
+
+/* Formulare */
+form.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  align-items: end;
+}
+label { display: block; font-size: 13px; color: var(--text-secondary); margin-bottom: 4px; }
+input, select, textarea {
+  width: 100%;
+  font: inherit;
+  padding: 8px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-s);
+  background: var(--surface-1);
+  color: var(--text-primary);
+}
+input:focus, select:focus, textarea:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-color: var(--accent);
+}
+
+/* Knöpfe */
+button.btn {
+  font: inherit;
+  padding: 8px 14px;
+  border-radius: var(--radius-s);
+  border: 1px solid var(--border-strong);
+  background: var(--surface-2);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+button.btn:hover { border-color: var(--accent); }
+button.btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+button.btn.danger { color: var(--critical); border-color: var(--critical); background: none; }
+button.link {
+  font: inherit;
+  background: none;
+  border: 0;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: var(--radius-s);
+}
+button.link:hover { color: var(--critical); background: var(--surface-2); }
+
+.row-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+
+/* Hinweis-Streifen */
+.note {
+  border-left: 3px solid var(--accent);
+  background: var(--surface-2);
+  padding: 12px 14px;
+  border-radius: 0 var(--radius-s) var(--radius-s) 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: var(--gap);
+}
+.note strong { color: var(--text-primary); }
+
+/* Fälligkeits-Kennzeichen */
+.tag {
+  display: inline-block;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 99px;
+  border: 1px solid currentColor;
+}
+.tag.warn { color: var(--warning); }
+.tag.crit { color: var(--critical); }
+.tag.ok   { color: var(--text-muted); }
+
+footer.foot {
+  color: var(--text-muted);
+  font-size: 13px;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+  margin-top: 32px;
+}

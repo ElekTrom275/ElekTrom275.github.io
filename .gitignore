@@ -1,0 +1,19 @@
+# --- Persönliche Finanzdaten gehören NIE ins Repository ---------------------
+# Dieses Repository ist öffentlich. Alles hier Eingetragene kann jeder lesen.
+# Die App speichert im Browser; falls du trotzdem mal etwas exportierst,
+# fängt diese Liste die üblichen Dateinamen ab.
+finanzen-*.json
+*export*.json
+*backup*.json
+daten/
+privat/
+*.csv
+*.xlsx
+
+# --- Technischer Kram -------------------------------------------------------
+.DS_Store
+Thumbs.db
+node_modules/
+.vscode/
+.idea/
+*.log
