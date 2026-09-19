@@ -60,6 +60,14 @@ export function zeichne(wurzel) {
         zusatz: `Saldo ${geldMitVorzeichen(monat.saldo)}`,
         klasse: '',
       })}
+      ${kpi({
+        label: 'Sparquote',
+        wert: monat.sparquote === null ? '–' : prozent(monat.sparquote),
+        klasse: monat.sparquote === null ? '' : monat.sparquote >= 0 ? 'pos' : 'neg',
+        zusatz: monat.sparquote === null
+          ? 'keine Einnahmen erfasst'
+          : `${geldMitVorzeichen(monat.saldo)} von ${geld(monat.einnahmen)}`,
+      })}
     </div>
 
     <div class="card">
