@@ -61,7 +61,6 @@ assets/js/
   ausgaben.js             Ansicht „Ausgaben"
   vertraege.js            Ansicht „Verträge"
   daten.js                Ansicht „Daten"
-archiv/                   die alte Testseite, nur zur Erinnerung
 ```
 
 Das Muster ist überall gleich:
