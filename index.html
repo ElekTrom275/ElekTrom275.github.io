@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Finanzplattform</title>
+  <meta name="description" content="Persönliche Übersicht über Portfolio, Ausgaben und Verträge. Alle Daten bleiben im Browser.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+</head>
+<body>
+
+  <header class="top">
+    <div class="wrap">
+      <h1>Finanzplattform</h1>
+      <span class="spacer"></span>
+      <button class="btn" id="knopf-theme" title="Hell / dunkel / Systemeinstellung">◐ Ansicht</button>
+
+      <nav class="tabs" role="tablist" aria-label="Bereiche">
+        <button role="tab" data-ziel="ueberblick" aria-selected="true">Überblick</button>
+        <button role="tab" data-ziel="portfolio"  aria-selected="false">Portfolio</button>
+        <button role="tab" data-ziel="ausgaben"   aria-selected="false">Ausgaben</button>
+        <button role="tab" data-ziel="vertraege"  aria-selected="false">Verträge</button>
+        <button role="tab" data-ziel="daten"      aria-selected="false">Daten</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- Jeder Abschnitt wird von einem eigenen Modul in assets/js/ gefüllt. -->
+    <section class="view" id="view-ueberblick" role="tabpanel"></section>
+    <section class="view" id="view-portfolio"  role="tabpanel" hidden></section>
+    <section class="view" id="view-ausgaben"   role="tabpanel" hidden></section>
+    <section class="view" id="view-vertraege"  role="tabpanel" hidden></section>
+    <section class="view" id="view-daten"      role="tabpanel" hidden></section>
+
+    <footer class="foot">
+      Alle Eingaben bleiben im Speicher dieses Browsers – nichts wird hochgeladen.
+      Sicherungskopie über den Reiter <a href="#daten">Daten</a>.
+      Keine Anlageberatung.
+    </footer>
+  </main>
+
+  <noscript>
+    <p style="padding:24px">Diese Seite braucht JavaScript, weil alle Berechnungen
+    im Browser stattfinden – genau deshalb verlassen deine Daten das Gerät nicht.</p>
+  </noscript>
+
+  <script type="module" src="assets/js/app.js"></script>
+</body>
+</html>
