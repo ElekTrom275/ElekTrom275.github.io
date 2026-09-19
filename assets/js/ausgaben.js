@@ -9,8 +9,8 @@ import {
 } from './berechnung.js';
 
 const KATEGORIEN = [
-  'Lebensmittel', 'Wohnen', 'Mobilität', 'Versicherung', 'Gesundheit',
-  'Freizeit', 'Anschaffung', 'Bildung', 'Einkommen', 'Sonstiges',
+  'Lebensmittel', 'Wohnen', 'Auto', 'Versicherung',
+  'Hobby', 'Urlaub', 'Einkommen', 'Sonstiges',
 ];
 
 /* Der gewählte Monat ist reine Ansichtssache und gehört deshalb nicht
